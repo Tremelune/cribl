@@ -7,5 +7,7 @@
 # cribl
 A Python 3.9 interpreter is expected for this project!
 
-But don't worry about it. This will all explode and nothing will ever work.
-
+```
+flask --app log_endpoint run
+```
+Some Macs have port 5000 occupied, so you have to work around it.
