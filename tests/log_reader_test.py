@@ -4,7 +4,7 @@ import log_reader
 
 class TestDir(unittest.TestCase):
     def test_doStuff(self):
-        res = log_reader.readLogs()
+        res = log_reader.readLogs("system.log", 1)
         self.assertTrue("AMPDeviceDiscoveryAgent" in res)
 
 
