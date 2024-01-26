@@ -9,39 +9,22 @@ class TestDir(unittest.TestCase):
         # Note the unicode
         expected = ["line e", "line d", "line c", "line b", "line a"]
         actual = []
-        for line in disk_reader.reverseRead("lines.txt", 0, 100):
+        for line in disk_reader.reverseRead("lines.txt"):
             actual.append(line)
         self.assertEqual(expected, actual)
 
     def testReverseRead_noNewline(self):
         expected = ["line e", "line d", "line c", "line b", "line a"]
         actual = []
-        for line in disk_reader.reverseRead("lines_no_newline.txt", 0, 100):
+        for line in disk_reader.reverseRead("lines_no_newline.txt"):
             actual.append(line)
         self.assertEqual(expected, actual)
-
-    def testReverseRead_limit(self):
-        expected = ["line e", "line d"]
-        actual = []
-        for line in disk_reader.reverseRead("lines.txt", 0, 2):
-            actual.append(line)
-        self.assertEqual(expected, actual)
-
-    def testReverseRead_limit(self):
-        expected = ["line e", "line d"]
-        actual = []
-        for line in disk_reader.reverseRead("lines_no_newline.txt", 0, 2):
-            actual.append(line)
-        self.assertEqual(expected, actual)
-
-    def test_reverseRead_limitOffsetNoNewline(self):
-        return None
 
     def testReverseRead_unicode(self):
         # Note the unicode
         expected = ["line b", "line "]
         actual = []
-        for line in disk_reader.reverseRead("lines_unicode.txt", 0, 100):
+        for line in disk_reader.reverseRead("lines_unicode.txt"):
             actual.append(line)
         self.assertEqual(expected, actual)
 
