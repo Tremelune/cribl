@@ -3,16 +3,21 @@ import log_reader
 
 
 class TestDir(unittest.TestCase):
-    # This test will fail on any other machine. Might could pass in a mock disk_reader,
-    # but let's get this done first...
-    def test_readLogs_filename(self):
-        res = log_reader.readLogs("system.log", 1)
-        self.assertTrue("__thr_AMMuxedDeviceDisconnected" in res[0])
-        self.assertFalse("rdisk5s1" in res[0])
+    def test_filterLine(self):
+        line = "puttin on the dog"
+        self.assertEqual(line, log_reader._filterLine(line, "dog"))
 
-        res = log_reader.readLogs("fsck_apfs.log", 2)  # Space at EOF
-        self.assertTrue("rdisk5s1" in res[0])
-        self.assertFalse("__thr_AMMuxedDeviceDisconnected" in res[0])
+        line = "love that doghouse livin"
+        self.assertEqual(line, log_reader._filterLine(line, "dog"))
+
+        line = "what's updog? nothing what's up with you"
+        self.assertEqual(line, log_reader._filterLine(line, "dog"))
+
+        line = "there's a snake in my boot!"
+        self.assertIsNone(log_reader._filterLine(line, "dog"))
+
+        line = "there's a snake in my boot!"
+        self.assertEqual(line, log_reader._filterLine(line, ""))
 
 
 if __name__ == '__main__':
