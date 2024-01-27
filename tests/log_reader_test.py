@@ -11,6 +11,7 @@ class TestDir(unittest.TestCase):
 
     def test_readLogs_badLimit(self):
         self.assertRaises(Exception, log_reader.readLogs, "filename.txt", 1000)
+        self.assertRaises(Exception, log_reader.readLogs, "filename.txt", 0)
 
     @mock.patch("disk_reader.reverseRead")
     def test_readLogs(self, mock_read):
