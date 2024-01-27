@@ -10,10 +10,14 @@ MAX_LINES = 100  # Arbitrary but reasonable
 
 def readLogs(filename: str, lineLimit: int = MAX_LINES, filterToken: str = None) -> list:
     if not filename:
-        raise Exception("Filename cannot be blank")
+        raise Exception("Filename cannot be blank!")
+
+    # Not the best approach to security, but it's something!
+    if "/" in filename:
+        raise Exception("Directories cannot be traversed!")
 
     if lineLimit > MAX_LINES:
-        raise Exception(f"Line limit cannot be greater than {MAX_LINES}")
+        raise Exception(f"Line limit cannot be greater than {MAX_LINES}!")
 
     lines = []
     for line in disk_reader.reverseRead(f"{BASE_DIR}/{filename}"):

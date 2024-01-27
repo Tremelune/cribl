@@ -7,6 +7,7 @@ import log_reader
 class TestDir(unittest.TestCase):
     def test_readLogs_badFilename(self):
         self.assertRaises(Exception, log_reader.readLogs, None)
+        self.assertRaises(Exception, log_reader.readLogs, "../secrets.txt")
 
     def test_readLogs_badLimit(self):
         self.assertRaises(Exception, log_reader.readLogs, "filename.txt", 1000)
