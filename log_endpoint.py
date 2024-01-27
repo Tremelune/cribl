@@ -21,7 +21,10 @@ def getLog():
     # error message our system bubbles up from the depths.
     limit = int(limit) if limit else MAX_LINES
 
-    return log_reader.readLogs(filename, limit, filter)
+    res = log_reader.readLogs(filename, limit, filter)
+    # Pull the whole resultset and respond with JSON of a list of lines.
+    # This is fine because we know we have a reasonable number of lines to pull into memory.
+    return list(res)
 
 
 @app.route("/")

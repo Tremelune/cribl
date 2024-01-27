@@ -1,3 +1,4 @@
+from collections.abc import Generator
 from typing import Optional
 
 import disk_reader
@@ -7,17 +8,23 @@ import fnmatch
 BASE_DIR = "/var/log"
 
 
-def readLogs(filename: str, lineLimit: Optional[int], filterToken: str = None) -> list:
+def readLogs(filename: str, lineLimit: Optional[int], filterToken: str = None) -> Generator[str]:
     _checkInputs(filename, lineLimit)
 
-    lines = []
+    lineCount = 0
     for line in disk_reader.reverseRead(f"{BASE_DIR}/{filename}"):
-        _addFilteredLine(lines, line, filterToken)
+        if filterToken:
+            match = fnmatch.fnmatch(line, f"*{filterToken}*")
+            if match:
+                yield line
+                lineCount += 1
+        else:
+            yield line
+            lineCount += 1
 
-        if lineLimit and len(lines) >= lineLimit:
-            return lines
-
-    return lines
+        if lineLimit and lineCount >= lineLimit:
+            return
+            yield line
 
 
 def _checkInputs(filename: str, lineLimit: int):
@@ -31,13 +38,3 @@ def _checkInputs(filename: str, lineLimit: int):
 
     if lineLimit < 1:
         raise Exception(f"Line limit must be positive!")
-
-
-# Modifies lines
-def _addFilteredLine(lines: list, line: str, filterToken: str):
-    if filterToken:
-        match = fnmatch.fnmatch(line, f"*{filterToken}*")
-        if match:
-            lines.append(line)
-    else:
-        lines.append(line)
