@@ -5,8 +5,8 @@ from flask import request
 
 import log_reader
 
-# It seems like there should be one place where this is instantiated...and some random endpoint is not
-# it. Look into how this should be done.
+# It seems like there should be one place where this is instantiated...
+# and some random endpoint is not it. Look into how this should be done.
 app = Flask(__name__)
 
 
@@ -24,11 +24,11 @@ def getLog():
 
     lines = log_reader.readLogs(filename, limit, filter)
 
-    # Respond with a text file, as big as they want to handle
-    return addNewlines(lines), {"Content-Type": "text/plaintext"}
+    # Respond with text, as big as they want to handle
+    return _addNewlines(lines), {"Content-Type": "text/plaintext"}
 
 
-def addNewlines(lines: Generator[str]):
+def _addNewlines(lines: Generator[str]) -> Generator[str]:
     for line in lines:
         yield line + "\n"
 
