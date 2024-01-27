@@ -5,10 +5,9 @@ import fnmatch
 
 
 BASE_DIR = "/var/log"
-MAX_LINES = 100  # Arbitrary but reasonable
 
 
-def readLogs(filename: str, lineLimit: int = MAX_LINES, filterToken: str = None) -> list:
+def readLogs(filename: str, lineLimit: int, filterToken: str = None) -> list:
     _checkInputs(filename, lineLimit)
 
     lines = []
@@ -30,8 +29,8 @@ def _checkInputs(filename: str, lineLimit: int):
     if "/" in filename:
         raise Exception("Directories cannot be traversed!")
 
-    if lineLimit < 1 or lineLimit > MAX_LINES:
-        raise Exception(f"Line limit must be between 1 and {MAX_LINES}!")
+    if lineLimit < 1:
+        raise Exception(f"Line limit must be positive!")
 
 
 # Modifies lines

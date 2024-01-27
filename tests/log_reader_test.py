@@ -17,7 +17,7 @@ class TestDir(unittest.TestCase):
     def test_readLogs(self, mock_read):
         mock_read.return_value = ["wednesday 3a", "tuesday 9p"]
 
-        res = log_reader.readLogs("blah")
+        res = log_reader.readLogs("blah", 99)
         self.assertEqual(len(res), 2)
         self.assertEqual("wednesday 3a", res[0])
         self.assertEqual("tuesday 9p", res[1])
@@ -49,7 +49,7 @@ class TestDir(unittest.TestCase):
     def test_readLogs_includeBlankLines(self, mock_read):
         mock_read.return_value = ["wednesday 3a", ""]
 
-        res = log_reader.readLogs("blah")
+        res = log_reader.readLogs("blah", 99)
         self.assertEqual(len(res), 2)
         self.assertEqual("", res[1])
 
