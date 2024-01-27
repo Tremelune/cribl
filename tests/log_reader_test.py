@@ -36,6 +36,20 @@ class TestDir(unittest.TestCase):
         self.assertEqual("tuesday 9p", res[1])
 
     @mock.patch("disk_reader.reverseRead")
+    def test_readLogs_filtering(self, mock_read):
+        mock_read.return_value = [
+            "one dog",
+            "",
+            "one cat",
+            "all dogs go to heaven",
+        ]
+
+        res = log_reader.readLogs("blah", 100, "dog")
+        self.assertEqual(len(res), 2)
+        self.assertEqual("one dog", res[0])
+        self.assertEqual("all dogs go to heaven", res[1])
+
+    @mock.patch("disk_reader.reverseRead")
     def test_readLogs_includeBlankLines(self, mock_read):
         mock_read.return_value = [
             "wednesday 3a",

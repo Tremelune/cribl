@@ -13,5 +13,10 @@ class TestDir(unittest.TestCase):
         self.assertFalse("__thr_AMMuxedDeviceDisconnected" in res[0])
 
 
+    def test_readLogs_filter(self):
+        res = log_reader.readLogs("system.log", 1, "syslogd")
+        self.assertTrue("ASL Sender Statistics" in res[0])
+
+
 if __name__ == '__main__':
     unittest.main()

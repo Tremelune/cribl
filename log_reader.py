@@ -22,10 +22,10 @@ def readLogs(filename: str, lineLimit: int = MAX_LINES, filterToken: str = None)
 
     lines = []
     for line in disk_reader.reverseRead(f"{BASE_DIR}/{filename}"):
-        filtered = _filterLine(line, filterToken)
-        # Explicit None check, because an empty string (blank line) we want to include
-        if filtered is not None:
-            lines.append(filtered)
+        if filterToken:
+            filtered = _filterLine(line, filterToken)
+            if filtered:
+                lines.append(filtered)
         else:
             lines.append(line)
 
