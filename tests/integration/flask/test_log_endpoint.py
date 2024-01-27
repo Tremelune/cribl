@@ -15,23 +15,24 @@ def testGetLog(client):
 def testGetLog_limit(client):
     response = client.get("/logs", query_string={"filename": "system.log", "limit": 1})
     assert response.status_code == 200
-    lines = response.json
-    assert len(lines) == 1
     assert "__thr_AMMuxedDeviceDisconnected" in response.text
+    split = response.text.split("\n")
+    assert len(split) == 2
 
 
 def testGetLog_filter(client):
     response = client.get("/logs", query_string={"filename": "system.log", "limit": 1, "filter": "syslogd"})
     assert response.status_code == 200
-    lines = response.json
-    assert len(lines) == 1
     assert "ASL Sender Statistics" in response.text
+    split = response.text.split("\n")
+    assert len(split) == 2
 
 
 def testGetBigLog(client):
-    response = client.get("/logs", query_string={"filename": "bigboy.log", "limit": 1})
+    response = client.get("/logs", query_string={"filename": "bigboy.log", "limit": 3})
     assert response.status_code == 200
-    # assert "[" not in response.text
-    assert "067456160 This is line 67456160" in response.text
     lines = response.text.split("\n")
-    assert len(lines) == 2
+    assert len(lines) == 4
+    assert "067456160 This is line 67456160" == lines[0]
+    assert "067456159 This is line 67456159" == lines[1]
+    assert "067456158 This is line 67456158" == lines[2]

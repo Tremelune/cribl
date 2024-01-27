@@ -1,3 +1,5 @@
+from collections.abc import Generator
+
 from flask import Flask
 from flask import request
 
@@ -19,12 +21,18 @@ def getLog():
     # At this point we should check for good input and respond with intelligent messages/codes to ensure
     # the caller knows exactly why the call failed...but for now we'll just explode and return whatever
     # error message our system bubbles up from the depths.
+
     limit = int(limit) if limit else MAX_LINES
 
-    res = log_reader.readLogs(filename, limit, filter)
-    # Pull the whole resultset and respond with JSON of a list of lines.
-    # This is fine because we know we have a reasonable number of lines to pull into memory.
-    return list(res)
+    lines = log_reader.readLogs(filename, limit, filter)
+
+    # Respond with a text file, as big as they want to handle
+    return addNewlines(lines), {"Content-Type": "text/plaintext"}
+
+
+def addNewlines(lines: Generator[str]):
+    for line in lines:
+        yield line + "\n"
 
 
 @app.route("/")
