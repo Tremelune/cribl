@@ -11,7 +11,7 @@ MAX_LINES = 100  # Arbitrary but reasonable
 
 
 @app.route("/logs", methods=['GET'])
-def get_log():
+def getLog():
     filename = request.args.get('filename')
     limit = request.args.get('limit')
     filter = request.args.get('filter')
@@ -25,5 +25,5 @@ def get_log():
 
 
 @app.route("/")
-def hello_world():
+def root():
     return "<p>Hello, World!</p>"

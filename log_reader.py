@@ -7,14 +7,14 @@ import fnmatch
 BASE_DIR = "/var/log"
 
 
-def readLogs(filename: str, lineLimit: int, filterToken: str = None) -> list:
+def readLogs(filename: str, lineLimit: Optional[int], filterToken: str = None) -> list:
     _checkInputs(filename, lineLimit)
 
     lines = []
     for line in disk_reader.reverseRead(f"{BASE_DIR}/{filename}"):
         _addFilteredLine(lines, line, filterToken)
 
-        if len(lines) >= lineLimit:
+        if lineLimit and len(lines) >= lineLimit:
             return lines
 
     return lines
