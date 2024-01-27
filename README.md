@@ -17,6 +17,8 @@ There might be some user permission issues with /var/log...
 Assumptions
 All files are plain text UTF-8
 
-TODO
-Some tests should be explicitly integration.
-I ain't trynna copy gigs around for interview tests.
+### Performance
+Pretty quick, and doesn't load everythign into memory.
+Slowest requests are for giant files where you're trying to match
+on something that is rare. Might go through whole 2GB file just
+to find three lines with the matches...
