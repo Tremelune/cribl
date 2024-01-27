@@ -15,7 +15,7 @@ class TestDir(unittest.TestCase):
 
     @mock.patch("disk_reader.reverseRead")
     def test_readLogs(self, mock_read):
-        mock_read.return_value = ["wednesday 3a", "tuesday 9p",]
+        mock_read.return_value = ["wednesday 3a", "tuesday 9p"]
 
         res = log_reader.readLogs("blah")
         self.assertEqual(len(res), 2)
@@ -24,11 +24,7 @@ class TestDir(unittest.TestCase):
 
     @mock.patch("disk_reader.reverseRead")
     def test_readLogs_limit(self, mock_read):
-        mock_read.return_value = [
-            "wednesday 3a",
-            "tuesday 9p",
-            "monday 2p",
-        ]
+        mock_read.return_value = ["wednesday 3a", "tuesday 9p", "monday 2p"]
 
         res = log_reader.readLogs("blah", 2)
         self.assertEqual(len(res), 2)
@@ -51,30 +47,37 @@ class TestDir(unittest.TestCase):
 
     @mock.patch("disk_reader.reverseRead")
     def test_readLogs_includeBlankLines(self, mock_read):
-        mock_read.return_value = [
-            "wednesday 3a",
-            "",
-        ]
+        mock_read.return_value = ["wednesday 3a", ""]
 
         res = log_reader.readLogs("blah")
         self.assertEqual(len(res), 2)
         self.assertEqual("", res[1])
 
     def test_filterLine(self):
+        lines = []
         line = "puttin on the dog"
-        self.assertEqual(line, log_reader._filterLine(line, "dog"))
+        log_reader._addFilteredLine(lines, line, "dog")
+        self.assertEqual(line, lines[0])
 
+        lines = []
         line = "love that doghouse livin"
-        self.assertEqual(line, log_reader._filterLine(line, "dog"))
+        log_reader._addFilteredLine(lines, line, "dog")
+        self.assertEqual(line, lines[0])
 
+        lines = []
         line = "what's updog? nothing what's up with you"
-        self.assertEqual(line, log_reader._filterLine(line, "dog"))
+        log_reader._addFilteredLine(lines, line, "dog")
+        self.assertEqual(line, lines[0])
 
+        lines = []
         line = "there's a snake in my boot!"
-        self.assertIsNone(log_reader._filterLine(line, "dog"))
+        log_reader._addFilteredLine(lines, line, "dog")
+        self.assertEqual(0, len(lines))
 
+        lines = []
         line = "there's a snake in my boot!"
-        self.assertEqual(line, log_reader._filterLine(line, ""))
+        log_reader._addFilteredLine(lines, line, "")
+        self.assertEqual(line, lines[0])
 
 
 if __name__ == '__main__':

@@ -9,6 +9,19 @@ MAX_LINES = 100  # Arbitrary but reasonable
 
 
 def readLogs(filename: str, lineLimit: int = MAX_LINES, filterToken: str = None) -> list:
+    _checkInputs(filename, lineLimit)
+
+    lines = []
+    for line in disk_reader.reverseRead(f"{BASE_DIR}/{filename}"):
+        _addFilteredLine(lines, line, filterToken)
+
+        if len(lines) >= lineLimit:
+            return lines
+
+    return lines
+
+
+def _checkInputs(filename: str, lineLimit: int):
     # These exceptions could be more specific, but the important bit is to explode
     if not filename:
         raise Exception("Filename cannot be blank!")
@@ -20,26 +33,12 @@ def readLogs(filename: str, lineLimit: int = MAX_LINES, filterToken: str = None)
     if lineLimit < 1 or lineLimit > MAX_LINES:
         raise Exception(f"Line limit must be between 1 and {MAX_LINES}!")
 
-    lines = []
-    for line in disk_reader.reverseRead(f"{BASE_DIR}/{filename}"):
-        if filterToken:
-            filtered = _filterLine(line, filterToken)
-            if filtered:
-                lines.append(filtered)
-        else:
+
+# Modifies lines
+def _addFilteredLine(lines: list, line: str, filterToken: str):
+    if filterToken:
+        match = fnmatch.fnmatch(line, f"*{filterToken}*")
+        if match:
             lines.append(line)
-
-        if len(lines) >= lineLimit:
-            return lines
-
-    return lines
-
-
-def _filterLine(line: Optional[str], filterToken: Optional[str]) -> Optional[str]:
-    if not filterToken:
-        return line
-
-    if fnmatch.fnmatch(line, f"*{filterToken}*"):
-        return line
-
-    return None
+    else:
+        lines.append(line)
