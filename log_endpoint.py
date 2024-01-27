@@ -5,6 +5,8 @@ import log_reader
 
 app = Flask(__name__)
 
+MAX_LINES = 100  # Arbitrary but reasonable
+
 
 @app.route("/logs", methods=['GET'])
 def get_log():
@@ -15,7 +17,7 @@ def get_log():
     # At this point we should check for good input and respond with intelligent messages/codes to ensure
     # the caller knows exactly why the call failed...but for now we'll just explode and return whatever
     # error message our system bubbles up from the depths.
-    limit = int(limit) if limit else log_reader.MAX_LINES
+    limit = int(limit) if limit else MAX_LINES
 
     return log_reader.readLogs(filename, limit, filter)
 
