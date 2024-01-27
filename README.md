@@ -1,10 +1,10 @@
+# Cribl Log Reader
 ```
 (_(
 /_/'_____/)
 "  |      |
    |""""""|
 ```
-# Cribl Log Reader
 ## Deploying
 In a terminal in the top of the project directory, run:
 
@@ -16,11 +16,11 @@ that. The easiest way is by killing the Mac process:
 
 https://stackoverflow.com/questions/72369320/why-always-something-is-running-at-port-5000-on-my-mac
 
-There might be some user permission issues with /var/log, but at
-on my machine, the app was deployed as the same user as the a user
-that could read from the directory.
+There might be some user permission issues with /var/log, but the
+app is usually deployed as a user that can read from that
+directory (works on my machine!).
 
-Note that a Python 3.9 interpreter is expected for this project!
+Note that a Python 3.9 interpreter is expected for this project.
 
 ## API
 
@@ -30,11 +30,11 @@ There is one endpoint:
 #### Input Params
 **filename** - The full name of the logfile (relative to /var/log).
 If you want to read from /var/log/system.log, you would pass in
-"system.log" for the filename params.
+"system.log".
 
-**filter (optional)** - Text of filter the results through. If you want only
-lines with "dog" in it, pass in "dog". Lines returned will include
-"lovely doghouse" as well as "what's updog?"
+**filter (optional)** - Text to filter the results through. If you
+only want lines with "dog" in it, pass in "dog". Lines returned will
+include "lovely doghouse" as well as "what's updog?"
 
 **limit (optional)** - This limits the response to the number of
 lines specified (*after* filtration).
@@ -44,29 +44,30 @@ Response is plaintext, with each log line separated by a newline
 character.
 
 Errors result in a HTTP status of 500 with an accompanying system
-message.
+message. This is cludgy, but not critical...It's on my todo list!
 
 ## Architecture
-I chose Flask due to its popularity and simplicity.
+I chose Python and Flask due to its popularity and simplicity.
 
 Also for simplicity, all files are in one Python package. There just
 weren't enough of them to bother organizing them. Conceptually,
 they occupy three tiers:
 
 - **API/UI** - Handles HTTP requests/responses as
-well as routing and content type. This is where log_endpoint lives.
+well as routing and content type. This is where log_endpoint
+belongs.
 - **Business Logic** - Where most application logic
 would live. Has  no knowledge of disks, databases, HTTP, or the
-CLI. This is where log_reader lives.
+CLI. This is where log_reader belongs.
 - **Data Access** - Where data is wrangeled. This is where disk
 access is provided, as well as calls to datastores, queues, or
-external APIs. disk_reader lives here.
+external APIs. disk_reader belongs here.
 
 ## Performance
-Data is pulled directly from disk and sent in the response stream.
-Regardless of how large the log file is, it is only read into
-memory in chunks commensurate with how much data has been
-transferred in the response.
+Data is pulled directly from disk and sent in the response stream
+while being processed. Regardless of how large the log file is, it
+is only read into memory in chunks commensurate with how much data
+has been transferred in the response.
 
 Besides those that transfer many lines, the slowest requests are
 those for which the log file is large, and the filter term is rare.
@@ -75,7 +76,8 @@ that match. I thought about trying to leverage a local grep
 instance, but that opens the door to a lot more environmental
 variables than I want in a take-home exercise...
 
-I also considered pagination, but pagination is *annoying*.
+I also considered pagination, but pagination is annoying for
+everyone.
 
 ## Assumptions
 - All log files are plain text UTF-8.
