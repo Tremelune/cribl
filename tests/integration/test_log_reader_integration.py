@@ -2,9 +2,12 @@ import unittest
 import log_reader
 
 
+# Note that the files this tests against are always changing, so the tests will fail
+# sometimes without changes. Not the best tests, but better than writing random files
+# to disk for this...If they were long-lived I'd worry about it.
 class TestDir(unittest.TestCase):
     def test_readLogs_filename(self):
-        res = log_reader.readLogs("system.log", 1)
+        res = log_reader.readLogs("system.log", 2)
         self.assertTrue("__thr_AMMuxedDeviceDisconnected" in res[0])
         self.assertFalse("rdisk5s1" in res[0])
 
