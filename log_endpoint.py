@@ -3,6 +3,8 @@ from flask import request
 
 import log_reader
 
+# It seems like there should be one place where this is instantiated...and some random endpoint is not
+# it. Look into how this should be done.
 app = Flask(__name__)
 
 MAX_LINES = 100  # Arbitrary but reasonable
