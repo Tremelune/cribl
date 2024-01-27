@@ -68,11 +68,19 @@ Regardless of how large the log file is, it is only read into
 memory in chunks commensurate with how much data has been
 transferred in the response.
 
-The slowest requests are those for which the log file is large,
-and the filter term is rare. The app might go through a whole 2GB
-file just to find three lines that match.
+Besides those that transfer many lines, the slowest requests are
+those for which the log file is large, and the filter term is rare.
+The app might go through a whole 2GB file just to find three lines
+that match. I thought about trying to leverage a local grep
+instance, but that opens the door to a lot more environmental
+variables than I want in a take-home exercise...
+
+I also considered pagination, but pagination is *annoying*.
 
 ## Assumptions
 - All log files are plain text UTF-8.
 - If no limit is specified, clients are expected to handle
 response sizes over a GB.
+- Log lines are returned most-recent first, which means if you
+request the entire log and write it to disk, the last line written
+will be the first line read (the oldest).
