@@ -6,23 +6,33 @@ def testRoot(client):
     assert "<p>Hello, World!</p>" == response.text
 
 
-def testGet(client):
+def testGetLog(client):
     response = client.get("/logs", query_string={"filename": "system.log"})
     assert response.status_code == 200
     assert "__thr_AMMuxedDeviceDisconnected" in response.text
 
 
-def testGet_limit(client):
+def testGetLog_limit(client):
     response = client.get("/logs", query_string={"filename": "system.log", "limit": 1})
     assert response.status_code == 200
-    lines = response.json
-    assert len(lines) == 1
     assert "__thr_AMMuxedDeviceDisconnected" in response.text
+    split = response.text.split("\n")
+    assert len(split) == 2
 
 
-def testGet_filter(client):
+def testGetLog_filter(client):
     response = client.get("/logs", query_string={"filename": "system.log", "limit": 1, "filter": "syslogd"})
     assert response.status_code == 200
-    lines = response.json
-    assert len(lines) == 1
     assert "ASL Sender Statistics" in response.text
+    split = response.text.split("\n")
+    assert len(split) == 2
+
+
+def testGetBigLog(client):
+    response = client.get("/logs", query_string={"filename": "bigboy.log", "limit": 3})
+    assert response.status_code == 200
+    lines = response.text.split("\n")
+    assert len(lines) == 4
+    assert "067456160 This is line 67456160" == lines[0]
+    assert "067456159 This is line 67456159" == lines[1]
+    assert "067456158 This is line 67456158" == lines[2]
