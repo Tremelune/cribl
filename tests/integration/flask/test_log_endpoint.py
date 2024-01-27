@@ -1,4 +1,4 @@
-from tests.unit.flask import client  # This is needed, though not referenced
+from tests.integration.flask import client  # This is needed, though not referenced
 
 
 def testRoot(client):
