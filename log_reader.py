@@ -27,7 +27,7 @@ def readLogs(filename: str, lineLimit: Optional[int], filterToken: str = None) -
             yield line
 
 
-def _checkInputs(filename: str, lineLimit: int):
+def _checkInputs(filename: str, lineLimit: Optional[int]):
     # These exceptions could be more specific, but the important bit is to explode
     if not filename:
         raise Exception("Filename cannot be blank!")
@@ -36,5 +36,5 @@ def _checkInputs(filename: str, lineLimit: int):
     if "/" in filename:
         raise Exception("Directories cannot be traversed!")
 
-    if lineLimit < 1:
+    if lineLimit and lineLimit < 1:
         raise Exception(f"Line limit must be positive!")
