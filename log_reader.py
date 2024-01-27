@@ -5,11 +5,15 @@ import fnmatch
 
 
 BASE_DIR = "/var/log"
+MAX_LINES = 100  # Arbitrary but reasonable
 
 
-def readLogs(filename: str, lineLimit: int = 100, filterToken: str = None) -> list:
+def readLogs(filename: str, lineLimit: int = MAX_LINES, filterToken: str = None) -> list:
     if not filename:
         raise Exception("Filename cannot be blank")
+
+    if lineLimit > MAX_LINES:
+        raise Exception(f"Line limit cannot be greater than {MAX_LINES}")
 
     lines = []
     for line in disk_reader.reverseRead(f"{BASE_DIR}/{filename}"):

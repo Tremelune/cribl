@@ -5,12 +5,11 @@ import log_reader
 
 
 class TestDir(unittest.TestCase):
-    @mock.patch("disk_reader.reverseRead")
-    def test_readLogs_badFilename(self, mock_read):
+    def test_readLogs_badFilename(self):
         self.assertRaises(Exception, log_reader.readLogs, None)
 
-        mock_read.return_value = []
-        log_reader.readLogs("dog")
+    def test_readLogs_badLimit(self):
+        self.assertRaises(Exception, log_reader.readLogs, "filename.txt", 1000)
 
     @mock.patch("disk_reader.reverseRead")
     def test_readLogs(self, mock_read):
