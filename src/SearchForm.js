@@ -31,6 +31,11 @@ export default function SearchForm() {
         event.preventDefault();
     }
 
+    let lines = ""
+    if(results) {
+        lines = results.map((line, index) => <li key={index}>{line}</li>)
+    }
+
     return (
         <div>
             <form onSubmit={search}>
@@ -40,10 +45,10 @@ export default function SearchForm() {
                 <button type="submit">Search</button>
             </form>
 
-            <div>
+            Results<br/>
+            <div class="results">
                 <ErrorBoundary fallback={<p>There was an error while submitting the form</p>}>
-                    Results
-                    {results}
+                    <ul>{lines}</ul>
                 </ErrorBoundary>
             </div>
         </div>
