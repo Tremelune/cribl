@@ -8,7 +8,7 @@
 ## Deploying
 In a terminal in the top of the project directory, run:
 
-```
+```commandline
 flask --app log_endpoint run
 ```
 Some Macs have port 5000 occupied, so you might have to work around
@@ -20,15 +20,30 @@ There might be some user permission issues with /var/log, but the
 app is usually deployed as a user that can read from that
 directory (works on my machine!).
 
-Note that a Python 3.9 interpreter is expected for this project.
+Note that a Python 3.9 interpreter is expected for this server.
+
+## UI
+If you would like to use the (very) rudimentary React UI, it can
+be deployed by running this in the root project directory:
+```commandline
+npm start
+```
+This will launch a site at http://localhost:3000/ that will let
+you hit the API. The "Get Preview" button gets up to ten lines of
+the specified log file. If you want the full file, a download link
+is provided (and it will limit the resultset to what was specified
+in the preview request).
+
+Due to cross-origin shenanegans, the "download" attribute won't
+force a file download, so you may want to right-click on that link
+and choose "Save As..." Otherwise, your browser might try and
+display a 2GB text file and explode if no limit has been specified.
 
 ## API
 
 There are two endpoints that pull from the same data source.
 
-Errors result in a HTTP status of 500 with an accompanying system
-message. This is cludgy, but not critical...It's on my todo list,
-I'll open a Jira ticket...
+Errors are, ah, not handled with grace. I'll open a Jira ticket...
 
 ### GET /logs/previews
 #### Input Params
@@ -61,13 +76,14 @@ Response is plaintext, with each log line separated by a newline
 character.
 
 ## Architecture
-I chose Python and Flask due to its popularity and simplicity.
+I chose Python and Flask (as well as Node.js/React) due to their
+popularity and simplicity.
 
-Also for simplicity, all files are in one Python package. There just
-weren't enough of them to bother organizing them. Conceptually,
-they occupy three tiers:
+Also for simplicity, all files are in one Python package. There
+just weren't enough of them to bother organizing them.
+Conceptually, they occupy three tiers:
 
-- **API/UI** - Handles HTTP requests/responses as
+- **API** - Handles HTTP requests/responses as
 well as routing and content type. This is where log_endpoint
 belongs.
 - **Business Logic** - Where most application logic
@@ -100,75 +116,3 @@ response sizes over a GB.
 - Log lines are returned most-recent first, which means if you
 request the entire log and write it to disk, the last line written
 will be the first line read (the oldest).
-
-# React
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

@@ -3,17 +3,18 @@ import React, { useState } from 'react';
 
 export default function SearchForm() {
     const [results, setResults] = useState(null);
+    const [fullUrl, setFullUrl] = useState(null);
+    const [filename, setFilename] = useState(null);
 
     function search(event) {
-        // console.log('form sumtit')
-        // console.log(event)
-        const BASE_URL = "http://127.0.0.1:5000/logs/previews"
+        const BASE_PREVIEW_URL = "http://127.0.0.1:5000/logs/previews"
+        const BASE_FULL_URL = "http://127.0.0.1:5000/logs"
 
         let filename = event.target.filename.value
         let limit = event.target.limit.value
         let filter = event.target.filter.value
 
-        let query = BASE_URL + "?filename=" + filename
+        let query = "?filename=" + filename
         if (limit) {
             query += "&limit=" + limit
         }
@@ -23,9 +24,10 @@ export default function SearchForm() {
 
         console.log(query)
 
-        fetch(query)
+        fetch(BASE_PREVIEW_URL + query)
             .then(response => response.json())
             .then(data => setResults(data))
+            .then(() => setFullUrl(BASE_FULL_URL + query))
             .catch(error => console.error(error));
 
         event.preventDefault();
@@ -36,16 +38,24 @@ export default function SearchForm() {
         lines = results.map((line, index) => <li key={index}>{line}</li>)
     }
 
+    let isDownloadHidden = true
+    if(fullUrl) {
+        isDownloadHidden = false
+    }
+
     return (
         <div>
             <form onSubmit={search}>
                 Filename: <input name="filename" type="text" required /><br />
                 Limit (optional): <input name="limit" type="text" /><br />
                 Filter (optional): <input name="filter" type="text" /><br />
-                <button type="submit">Search</button>
+                <button type="submit">Get Preview</button>
             </form>
 
-            Results<br/>
+            Results<br />
+            <div hidden={isDownloadHidden}>
+                <a href={fullUrl} download target="_blank">[download]</a>
+            </div>
             <div class="results">
                 <ErrorBoundary fallback={<p>There was an error while submitting the form</p>}>
                     <ul>{lines}</ul>
