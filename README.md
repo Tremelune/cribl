@@ -8,7 +8,7 @@
 ## Deploying
 In a terminal in the top of the project directory, run:
 
-```
+```commandline
 flask --app log_endpoint run
 ```
 Some Macs have port 5000 occupied, so you might have to work around
@@ -20,15 +20,33 @@ There might be some user permission issues with /var/log, but the
 app is usually deployed as a user that can read from that
 directory (works on my machine!).
 
-Note that a Python 3.9 interpreter is expected for this project.
+Note that a Python 3.9 interpreter is expected for this server.
+
+## UI
+If you would like to use the (very) rudimentary React UI, it can
+be deployed by running this in the root project directory:
+```commandline
+npm start
+```
+This will launch a site at http://127.0.0.1:3000/ that will let
+you hit the API. The "Get Preview" button gets up to ten lines of
+the specified log file. If you want the full file, a download link
+is provided (and it will limit the resultset to what was specified
+in the preview request).
+
+Due to cross-origin shenanegans, the "download" attribute won't
+force a file download, so you may want to right-click on that link
+and choose "Save As..." Otherwise, your browser might try and
+display a 2GB text file and explode if no limit has been specified.
+
+This is also why you want to run the UI and API under 127.0.0.1
+(instead of, say, localhost).
 
 ## API
 
 There are two endpoints that pull from the same data source.
 
-Errors result in a HTTP status of 500 with an accompanying system
-message. This is cludgy, but not critical...It's on my todo list,
-I'll open a Jira ticket...
+Errors are, ah, not handled with grace. I'll open a Jira ticket...
 
 ### GET /logs/previews
 #### Input Params
@@ -61,13 +79,14 @@ Response is plaintext, with each log line separated by a newline
 character.
 
 ## Architecture
-I chose Python and Flask due to its popularity and simplicity.
+I chose Python and Flask (as well as Node.js/React) due to their
+popularity and simplicity.
 
-Also for simplicity, all files are in one Python package. There just
-weren't enough of them to bother organizing them. Conceptually,
-they occupy three tiers:
+Also for simplicity, all files are in one Python package. There
+just weren't enough of them to bother organizing them.
+Conceptually, they occupy three tiers:
 
-- **API/UI** - Handles HTTP requests/responses as
+- **API** - Handles HTTP requests/responses as
 well as routing and content type. This is where log_endpoint
 belongs.
 - **Business Logic** - Where most application logic
