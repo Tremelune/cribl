@@ -1,11 +1,11 @@
-# Cribl Log Reader
+# The Benedict Cribl Log Reader
 ```
 (_(
 /_/'_____/)
 "  |      |
    |""""""|
 ```
-## Deploying
+## Deploying the Server
 In a terminal in the top of the project directory, run:
 
 ```commandline
@@ -96,6 +96,10 @@ CLI. This is where log_reader belongs.
 access is provided, as well as calls to datastores, queues, or
 external APIs. disk_reader belongs here.
 
+Please forgive the munging of the UI React/Node.js code and API
+Python/Flask code. They should probably be in their own directories
+but things started breaking as I moved them around, so I stopped.
+
 ## Performance
 Data is pulled directly from disk and sent in the response stream
 while being processed. Regardless of how large the log file is, it
@@ -111,6 +115,48 @@ variables than I want in a take-home exercise...
 
 I also considered pagination, but pagination is annoying for
 everyone.
+
+## Testing
+
+There are unit tests and integration tests. I've been running them
+from my IDE while building.
+
+The unit tests can be run quickly on
+any environment.
+
+The integration tests rely on the existence of certain log files
+on my local machine, but could be easily tweaked to account for any
+files on another machine. That said, they exist to help me build
+things, but if they were long-lived, I would take a different
+approach (such as creating the files as part of the
+test fixture).
+
+One set of integration tests spins up a Flask instance and hits
+the real endpoints. Mocking proved tricky, so they too hit the
+disk looking for specific files in var.log.
+
+## Proxy
+I didn't get around to creating the proxy server for pulling log
+files from other machines, but my approach would be something
+like this:
+
+Create a log_client.py file whose only job is to hit other Cribl
+log reader instances.
+
+It would have a map of server IDs to base URLs/IPs or something
+to determine where to send the request.
+
+The the calls to log_client would simply return the response body
+from the other servers as a Python generator (iterable) stream.
+
+This would mean that any log reader instance could act as a proxy,
+streaming the same log results from other servers in the same
+format, also without having to pull the entire response into memory at any point in the chain.
+
+The API interface would be the same, with the exception of 
+specifying a server ID in the initial request to the proxy server
+(which is the same as all the other servers). If no ID is
+specified, it behaves as normal, pulling from its own log disk.
 
 ## Assumptions
 - All log files are plain text UTF-8.
