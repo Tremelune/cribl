@@ -28,7 +28,7 @@ be deployed by running this in the root project directory:
 ```commandline
 npm start
 ```
-This will launch a site at http://localhost:3000/ that will let
+This will launch a site at http://127.0.0.1:3000/ that will let
 you hit the API. The "Get Preview" button gets up to ten lines of
 the specified log file. If you want the full file, a download link
 is provided (and it will limit the resultset to what was specified
@@ -38,6 +38,9 @@ Due to cross-origin shenanegans, the "download" attribute won't
 force a file download, so you may want to right-click on that link
 and choose "Save As..." Otherwise, your browser might try and
 display a 2GB text file and explode if no limit has been specified.
+
+This is also why you want to run the UI and API under 127.0.0.1
+(instead of, say, localhost).
 
 ## API
 

@@ -1,4 +1,3 @@
-import { ErrorBoundary } from "react-error-boundary";
 import React, { useState } from 'react';
 
 export default function SearchForm() {
@@ -56,11 +55,7 @@ export default function SearchForm() {
             <div hidden={isDownloadHidden}>
                 <a href={fullUrl} download target="_blank">[download]</a>
             </div>
-            <div class="results">
-                <ErrorBoundary fallback={<p>There was an error while submitting the form</p>}>
-                    <ul>{lines}</ul>
-                </ErrorBoundary>
-            </div>
+            <div className="results"><ul>{lines}</ul></div>
         </div>
     );
 }
