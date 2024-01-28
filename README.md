@@ -26,6 +26,10 @@ Note that a Python 3.9 interpreter is expected for this server.
 If you would like to use the (very) rudimentary React UI, it can
 be deployed by running this in the root project directory:
 ```commandline
+npm install
+```
+and once the packages are installed:
+```commandline
 npm start
 ```
 This will launch a site at http://127.0.0.1:3000/ that will let
