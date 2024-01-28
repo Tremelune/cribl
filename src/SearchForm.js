@@ -7,7 +7,7 @@ export default function SearchForm() {
     function search(event) {
         // console.log('form sumtit')
         // console.log(event)
-        const BASE_URL = "http://127.0.0.1:5000/logs"
+        const BASE_URL = "http://127.0.0.1:5000/logs/previews"
 
         let filename = event.target.filename.value
         let limit = event.target.limit.value
@@ -22,14 +22,11 @@ export default function SearchForm() {
         }
 
         console.log(query)
-        // let lines = ["1 dog", "2 dogs", "3 whats"].map((line, index) => <li key={index}>{line}</li>);
-        
-        fetch(query, { mode: 'no-cors'})
-          .then(response => response.text())
-          .then(data => console.log("DATA"))
-          .then(data => console.log(data))
-          .then(body => setResults(body))
-          .catch(error => console.error(error));
+
+        fetch(query)
+            .then(response => response.json())
+            .then(data => setResults(data))
+            .catch(error => console.error(error));
 
         event.preventDefault();
     }
@@ -37,7 +34,7 @@ export default function SearchForm() {
     return (
         <div>
             <form onSubmit={search}>
-                Filename: <input name="filename" type="text" required/><br />
+                Filename: <input name="filename" type="text" required /><br />
                 Limit (optional): <input name="limit" type="text" /><br />
                 Filter (optional): <input name="filter" type="text" /><br />
                 <button type="submit">Search</button>

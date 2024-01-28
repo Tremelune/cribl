@@ -28,7 +28,9 @@ def getLogPreview():
     limit = min(int(limit), PREVIEW_MAX_LINES) if limit else PREVIEW_MAX_LINES
 
     lines = log_reader.readLogs(filename, limit, filter)
-    return jsonify(list(lines))
+    response = jsonify(list(lines))
+    response.headers.add('Access-Control-Allow-Origin', '*')  # Hack in CORS compliance...
+    return response
 
 
 @app.route("/logs", methods=['GET'])
