@@ -24,9 +24,13 @@ Note that a Python 3.9 interpreter is expected for this project.
 
 ## API
 
-There is one endpoint:
+There are two endpoints that pull from the same data source.
 
-### GET /logs
+Errors result in a HTTP status of 500 with an accompanying system
+message. This is cludgy, but not critical...It's on my todo list,
+I'll open a Jira ticket...
+
+### GET /logs/previews
 #### Input Params
 **filename** - The full name of the logfile (relative to /var/log).
 If you want to read from /var/log/system.log, you would pass in
@@ -37,14 +41,24 @@ only want lines with "dog" in it, pass in "dog". Lines returned will
 include "lovely doghouse" as well as "what's updog?"
 
 **limit (optional)** - This limits the response to the number of
+lines specified (*after* filtration), with a maximum of ten. If no
+limit is specified, the default is 10.
+
+#### Response
+Response is a JSON list of lines.
+
+### GET /logs
+#### Input Params
+**filename** - Same as /logs/previews
+
+**filter (optional)** - Same as /logs/prviews
+
+**limit (optional)** - This limits the response to the number of
 lines specified (*after* filtration).
 
 #### Response
 Response is plaintext, with each log line separated by a newline
 character.
-
-Errors result in a HTTP status of 500 with an accompanying system
-message. This is cludgy, but not critical...It's on my todo list!
 
 ## Architecture
 I chose Python and Flask due to its popularity and simplicity.
