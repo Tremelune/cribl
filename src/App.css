@@ -42,3 +42,7 @@
   font-size: 0.6em;
   color: lightgray;
 }
+
+img {
+  float: right;
+}

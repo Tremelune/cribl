@@ -7,6 +7,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <strong>Benedict Cribl GOAT Log Reader</strong>
+        <img src="goat-logger.jpg"/>
         <SearchForm />
       </header>
     </div>
