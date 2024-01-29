@@ -10,7 +10,7 @@ import log_reader
 # and some random endpoint is not it. Look into how this should be done.
 app = Flask(__name__)
 
-PREVIEW_MAX_LINES = 10  # Arbitrary but reasonable
+PREVIEW_MAX_LINES = 100  # Arbitrary but reasonable
 
 
 @app.route("/logs/previews", methods=['GET'])
