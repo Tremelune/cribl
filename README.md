@@ -103,7 +103,7 @@ access is provided, as well as calls to datastores, queues, or
 external APIs. disk_reader belongs here.
 
 Please forgive the munging of the UI React/Node.js code and API
-Python/Flask code. They should probably be in their own directories
+Python/Flask code—they should probably be in their own directories
 but things started breaking as I moved them around, so I stopped.
 
 ## Performance
@@ -154,10 +154,10 @@ to determine where to send the request.
 
 Calls to log_client would simply return the response body
 from the other servers as a Python generator (iterable) stream.
-
 This would mean that any log reader instance could act as a proxy,
 streaming the same log results from other servers in the same
-format, also without having to pull the entire response into memory at any point in the chain.
+format, also without having to pull the entire response into
+memory at any point in the chain.
 
 The API interface would be the same, with the exception of 
 specifying a server ID in the initial request to the primary server
@@ -171,3 +171,5 @@ response sizes over a GB.
 - Log lines are returned most-recent first, which means if you
 request the entire log and write it to disk, the last line written
 will be the first line read (the oldest).
+- Building profitable software on a team involves a lot more than
+writing code, particularly if you want to enjoy doing it.
