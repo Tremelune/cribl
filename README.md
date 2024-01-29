@@ -63,8 +63,8 @@ only want lines with "dog" in it, pass in "dog". Lines returned will
 include "lovely doghouse" as well as "what's updog?"
 
 **limit (optional)** - This limits the response to the number of
-lines specified (*after* filtration), with a maximum of ten. If no
-limit is specified, the default is 10.
+lines specified (*after* filtration), with a maximum of 100. If no
+limit is specified, the default is 100.
 
 #### Response
 Response is a JSON list of lines.
