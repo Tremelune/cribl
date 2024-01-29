@@ -9,6 +9,14 @@ BASE_DIR = "/var/log"
 
 
 def readLogs(filename: str, lineLimit: Optional[int], filterToken: str = None) -> Generator[str]:
+    """Reads log files, filters them for matching words, and limits the resultset.
+
+    :param filename: Filename of log file, relative to /var/log.
+    :param lineLimit: The maximum number of lines to include in the results.
+    :param filterToken: String on which to match lines, with wildcards on both ends. "dog" would return lines such as
+    "oh wow that's beautiful doghouse" and "What's updog?"
+    :returns: Generator that iterates over each matching line, up until the limit is reached.
+    """
     _checkInputs(filename, lineLimit)
 
     lineCount = 0

@@ -3,10 +3,19 @@ import os
 BUFFER_SIZE = 8192
 
 
-# generator for reading text files backwards.
-# It relies on characters being UTF-8 and a fixed size.
-# It also expects each line to end in a newline character.
 def reverseRead(path: str) -> list:
+    """Reads from the local disk.
+
+    Files are assumed to be plaintext with a fixed byte size per character.
+
+    It turns out it's surprisingly difficult to read a file backwards in Python. It must be done sequentially in chunks
+    using the file size to scroll to the end and read from there.
+
+    Pulled largely from: https://stackoverflow.com/questions/2301789/how-to-read-a-file-in-reverse-order
+
+    :param path: Absolute path to the file.
+    :returns: Generator that iterates over each line of text in the file (separated by a newline character).
+    """
     with open(path, 'rb') as file:
         segment = None
         offset = 0

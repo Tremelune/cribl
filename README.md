@@ -125,8 +125,8 @@ everyone.
 There are unit tests and integration tests. I've been running them
 from my IDE while building.
 
-The unit tests can be run quickly on
-any environment.
+The unit tests can be run quickly on any environment. Many mock
+out the disk reader to avoid having to have real files locally.
 
 The integration tests rely on the existence of certain log files
 on my local machine, but could be easily tweaked to account for any

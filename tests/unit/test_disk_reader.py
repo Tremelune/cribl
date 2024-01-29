@@ -10,7 +10,6 @@ import disk_reader
 # to work.
 class TestDir(unittest.TestCase):
     def testReverseRead(self):
-        # Note the unicode
         expected = ["line e", "line d", "line c", "line b", "line a"]
         actual = []
         for line in disk_reader.reverseRead("unit/lines.txt"):
@@ -25,7 +24,6 @@ class TestDir(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def testReverseRead_unicode(self):
-        # Note the unicode
         expected = ["line b", "line "]
         actual = []
         for line in disk_reader.reverseRead("unit/lines_unicode.txt"):
