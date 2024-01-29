@@ -11,6 +11,8 @@ In a terminal in the top of the project directory, run:
 ```commandline
 flask --app log_endpoint run
 ```
+This will launch the server at http://127.0.0.1:5000/
+
 Some Macs have port 5000 occupied, so you might have to work around
 that. The easiest way is by killing the Mac process:
 
@@ -33,7 +35,7 @@ and once the packages are installed:
 npm start
 ```
 This will launch a site at http://127.0.0.1:3000/ that will let
-you hit the API. The "Get Preview" button gets up to ten lines of
+you hit the API. The "Get Preview" button gets up to 100 lines of
 the specified log file. If you want the full file, a download link
 is provided (and it will limit the resultset to what was specified
 in the preview request).
@@ -144,13 +146,13 @@ I didn't get around to creating the proxy server for pulling log
 files from other machines, but my approach would be something
 like this:
 
-Create a log_client.py file whose only job is to hit other Cribl
-log reader instances.
+Create a log_client (in the Data Access package) whose only job is
+to hit other Benedict Cribl Log Reader instances.
 
 It would have a map of server IDs to base URLs/IPs or something
 to determine where to send the request.
 
-The the calls to log_client would simply return the response body
+Calls to log_client would simply return the response body
 from the other servers as a Python generator (iterable) stream.
 
 This would mean that any log reader instance could act as a proxy,
@@ -158,9 +160,9 @@ streaming the same log results from other servers in the same
 format, also without having to pull the entire response into memory at any point in the chain.
 
 The API interface would be the same, with the exception of 
-specifying a server ID in the initial request to the proxy server
-(which is the same as all the other servers). If no ID is
-specified, it behaves as normal, pulling from its own log disk.
+specifying a server ID in the initial request to the primary server
+(which has the same code as all the secondary servers). If no ID
+is specified, it behaves as normal, pulling from its own log disk.
 
 ## Assumptions
 - All log files are plain text UTF-8.
